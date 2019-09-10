@@ -1,0 +1,32 @@
+<html>
+    <head>
+        <title>Project01</title>
+    </head>
+    <body>
+        <h1>Game</h1>
+        <div id="gameport"></div>
+
+        <h1>Instructions</h1>
+        <p>How to play my game..</p>
+
+        <h1>Comments</h1>
+        <div id="disqus_thread"></div>
+
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/pixi.js/5.1.3/pixi.min.js"></script>
+        <script src="game.js"></script>
+        <script>
+            (function() {
+
+            var d = document, s = d.createElement('script');
+
+            s.src = 'http://nau-cs413.disqus.com/embed.js';
+
+            s.setAttribute('data-timestamp', +new Date());
+
+            (d.head || d.body).appendChild(s);
+
+        })();
+        </script>
+
+    </body>
+</html>
