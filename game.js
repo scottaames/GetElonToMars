@@ -29,6 +29,7 @@ loader.add([
     "img/start-canvas.png",
     "img/start-button.png",
     "img/space-canvas.png",
+    "img/lg-asteroid.png",
     "img/rocket.png"
     ])
     .load(initStart);
@@ -123,27 +124,85 @@ function initGame() {
     gameState = play;
 
     // add ticker which updates gameLoop 60 times per second
-    app.ticker.add(e => gameLoop(e));
+    app.ticker.add(delta => gameLoop(delta));
 }
 
 // gameLoop function which accepts the gamestate
-function gameLoop(e) {
-    gameState(e);
+function gameLoop(delta) {
+    gameState(delta);
 }
 
 // function for when gamestate = play which enables rocket movement
-function play(e) {
+function play(delta) {
     rocket.x += rocket.velx;
     rocket.y += rocket.vely;
 }
 
+function spawnAsteroid() {
+    let asteroid = new Sprite(resources["img/lg-asteroid.png"].texture);
+    let randScale = randomInt(50, 200) / 100;  // get int between .5 and 2
+    let randX = randomInt(0, app.stage.width - asteroid.width);
+    let randVelX = randomInt(-6, 6);
+    let randVely = randomInt(-6, 6);
+    asteroid.scale.set(randScale, randScale);
+    asteroid.position.set(randX, 0);
+    while(isInBounds(asteroid))
+    {
+        asteroid.x += randVelX;
+        asteroid.y += randVelY;
+    }
 
 
+}
+
+function collision(sprite1, sprite2) {
+    // combined half width of the two sprites & combined half height
+    let hit, halfWidths, halfHeights, velx, vely, collided = false;
+
+    // half width and half heights for each sprite
+    sprite1.halfWidth = sprite1.width / 2
+    sprite1.halfHeight = sprite1.height / 2
+    sprite2.halfWidth = sprite2.width / 2
+    sprite2.halfHeight = sprite2.height / 2
+
+    // center points
+    sprite1.centerX = sprite1.x + sprite1.halfWidth;
+    sprite1.centerY = sprite1.y + sprite1.halfHeight;
+    sprite2.centerX = sprite2.x + sprite2.halfWidth;
+    sprite2.centerY = sprite2.y + sprite2.halfHeight;
+
+    // distance vector between the sprites
+    distanceVectX = sprite1.centerX - sprite2.centerX;
+    distanceVectY = sprite1.centerY - sprite2.centerY;
+
+    // half widths & heights combined for collision detection
+    halfWidths = sprite1.halfWidth + sprite2.halfWidth;
+    halfHeights = sprite1.halfHeight + sprite2.halfHeight;
+
+    // checking for x axis collision
+    if(Math.abs(distanceVectX) < halfWidths) {
+        // checking for y axis collision
+        if(Math.abs(distanceVectY) < halfHeights)
+        {
+            collided = true;
+        }
+    }
+    // assume no collision
+    return collided;
+}
+
+function isInBounds(object) {
+
+}
 
 
-
-
-
+// random int generator that can't be zero, for when the velocity calls it
+function randomInt(min, max) {
+  let randnum = Math.floor(Math.random() * (max - min + 1)) + min;
+  if(randnum === 0){
+    return randomInt(min, max);
+  }
+}
 
 
 function keyboard(value) {
